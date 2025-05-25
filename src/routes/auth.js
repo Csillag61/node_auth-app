@@ -12,8 +12,11 @@ router.post(
   [body('email').isEmail(), body('password').isLength({ min: 6 })],
   async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty())
+    if (!errors.isEmpty()) {
+      // Return validation errors directly (no type assertion in JS)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return res.status(400).json({ errors: errors.array() });
+    }
 
     const { name, email, password } = req.body;
 
@@ -26,7 +29,9 @@ router.post(
         email,
         password: hashedPassword,
       });
-      res.status(201).json({ message: `${user} User registered successfully!`, user });
+      res
+        .status(201)
+        .json({ message: `${user} User registered successfully!`, user });
     } catch (error) {
       res.status(500).json({ message: 'Error registering user', error });
     }

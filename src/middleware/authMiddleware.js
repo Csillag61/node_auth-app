@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 
 const authMiddleware = (req, res, next) => {
   const token = req.header('Authorization');
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   if (!token) return res.status(401).json({ message: 'Access denied' });
 
   try {
@@ -14,6 +15,3 @@ const authMiddleware = (req, res, next) => {
 };
 
 export default authMiddleware;
-
-// This middleware checks for a JWT token in the Authorization header of incoming requests.
-// If the token is present, it verifies the token using the secret key defined in the environment variables.
