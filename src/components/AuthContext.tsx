@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         accessTokenService.save(accessToken);
         localStorage.setItem('user', JSON.stringify(user));
         setCurrentUser(user);
-        navigate('/dashboard');
+        navigate('/');
       } catch (error) {
         console.error('Activation failed:', error);
       }
@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         accessTokenService.save(accessToken);
         localStorage.setItem('user', JSON.stringify(user));
         setCurrentUser(user);
-        navigate('/dashboard');
+        navigate('/');
       } catch (error) {
         console.error('Login error:', error);
       }

@@ -141,7 +141,7 @@ export const RegistrationPage = () => {
               {touched.password && errors.password ? (
                 <p className="help is-danger">{errors.password}</p>
               ) : (
-                <p className="help">At least 6 characters</p>
+                <p className="help">At least 8 characters</p>
               )}
             </div>
             <div className="field">

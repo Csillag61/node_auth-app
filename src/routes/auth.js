@@ -9,11 +9,11 @@ const router = express.Router();
 // Register User
 router.post(
   '/register',
-  [body('email').isEmail(), body('password').isLength({ min: 6 })],
+  [body('email').isEmail(), body('password').isLength({ min: 8 })],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      // Return validation errors directly (no type assertion in JS)
+      // Explicitly type errors.array() as ValidationError[]
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return res.status(400).json({ errors: errors.array() });
     }
@@ -29,9 +29,17 @@ router.post(
         email,
         password: hashedPassword,
       });
-      res
-        .status(201)
-        .json({ message: `${user} User registered successfully!`, user });
+
+      // Only return safe fields
+      res.status(201).json({
+        message: 'User registered successfully!',
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          createdAt: user.createdAt,
+        },
+      });
     } catch (error) {
       res.status(500).json({ message: 'Error registering user', error });
     }

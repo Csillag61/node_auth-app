@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { Loader } from './Loader';
 
-export const RequireAuth = ({ children }: { children?: React.ReactNode }) => {
+export const RequireAuth = ({
+  children,
+}: {
+  children?: React.ReactNode;
+}): React.ReactNode => {
   const { isChecked, currentUser } = useAuth();
   const location = useLocation();
 
-  if (!isChecked) return <Loader />;
-  if (!currentUser)
-    return <Navigate to="/login" state={{ from: location }} replace />;
+  const authContent = useMemo(() => {
+    if (!isChecked) return <Loader />;
+    if (!currentUser)
+      return <Navigate to="/login" state={{ from: location }} replace />;
 
-  return children ?? <Outlet />;
+    return children ?? <Outlet />;
+  }, [isChecked, currentUser, location, children]);
+
+  return authContent;
 };

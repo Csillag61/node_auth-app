@@ -1,17 +1,27 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 import { AuthProvider } from './components/AuthContext';
 import App from './App';
 
-export const Root = () => (
+const Root = () => (
   <AuthProvider>
-    <Router>
+    <BrowserRouter>
       <App />
-    </Router>
+    </BrowserRouter>
   </AuthProvider>
 );
+
 const container = document.getElementById('root');
+
+if (!container) {
+  throw new Error("Root container not found. Ensure <div id='root'></div> exists in index.html.");
+}
+
 const root = createRoot(container);
-root.render(<Root />);
+root.render(
+  <StrictMode>
+    <Root />
+  </StrictMode>
+);

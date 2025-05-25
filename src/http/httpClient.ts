@@ -2,6 +2,18 @@ import axios, { AxiosError } from 'axios';
 import { authService } from '../services/authService';
 import { accessTokenService } from '../services/accessTokenService';
 
+// Extend ImportMeta globally to include 'env'
+declare global {
+  interface ImportMeta {
+    readonly env: ImportMetaEnv;
+  }
+}
+
+interface ImportMetaEnv {
+  readonly VITE_API_URL: string;
+  // add other env variables here if needed
+}
+
 export const httpClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL as string,
   withCredentials: true,
@@ -9,7 +21,7 @@ export const httpClient = axios.create({
 
 // add `Authorization` header to all requests
 httpClient.interceptors.request.use((request) => {
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = accessTokenService.get();
 
   if (accessToken) {
     request.headers.Authorization = `Bearer ${accessToken}`;
